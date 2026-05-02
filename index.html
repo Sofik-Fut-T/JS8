@@ -3,30 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeSofStore - Кіберпанк Каталог</title>
+    <title>DeSofStore - Лабораторна робота 8</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">DeSofStore</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="index.html">Додому (Home)</a>
-                <a class="nav-link" href="#" onclick="loadCatalog(event)">Каталог (Catalog)</a>
-            </div>
-        </div>
+    <nav class="custom-nav">
+        <div class="logo">DeSofStore</div>
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        
+        <ul id="nav-menu">
+            <li><a href="index.html">🏠 Головна</a></li>
+            <li><a href="#" onclick="loadCatalog(event)">📦 Каталог</a></li>
+            <li><a href="#" onclick="loadSpecials(event)">⭐ Specials</a></li>
+        </ul>
     </nav>
 
     <div id="content">
-        <div id="main-content" class="hero-section">
-            <div class="container hero-container text-center">
-                <button class="btn btn-primary btn-lg px-5 hero-btn" onclick="loadCatalog(event)">
-                    Відкрити каталог
+        <div id="main-content">
+            
+            <div class="carousel-container">
+                <div class="carousel-slide" id="slider">
+                    <img src="https://placehold.co/800x400/1a1a2e/00c6ff?text=Slide+1" alt="Слайд 1">
+                    <img src="https://placehold.co/800x400/16213e/e94560?text=Slide+2" alt="Слайд 2">
+                    <img src="https://placehold.co/800x400/0f3460/8a2be2?text=Slide+3" alt="Слайд 3">
+                </div>
+                <button class="prev-btn" onclick="moveSlide(-1)">❮</button>
+                <button class="next-btn" onclick="moveSlide(1)">❯</button>
+            </div>
+
+            <div class="responsive-images">
+                <h3 class="responsive-title">Демонстрація адаптивних картинок:</h3>
+                
+                <div class="large-only">
+                    <img src="https://placehold.co/600x200/005500/FFF?text=Large+Screen+Only+1" alt="Large 1">
+                    <img src="https://placehold.co/600x200/000055/FFF?text=Large+Screen+Only+2" alt="Large 2">
+                </div>
+
+                <div class="medium-only">
+                    <img src="https://placehold.co/300x150/550000/FFF?text=Medium+Screen+Only+1" alt="Medium 1">
+                    <img src="https://placehold.co/300x150/555500/FFF?text=Medium+Screen+Only+2" alt="Medium 2">
+                </div>
+            </div>
+
+            <div class="hero-container text-center">
+                <button class="hero-btn" onclick="loadCatalog(event)">
+                    Відкрити каталог товарів
                 </button>
             </div>
+
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
         </div>
     </div>
 
