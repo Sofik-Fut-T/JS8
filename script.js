@@ -1,85 +1,35 @@
-// Функція завантаження каталогу категорій
-function loadCatalog(event) {
-    if (event) event.preventDefault();
-
-    fetch('data/categories.json')
-        .then(response => response.json())
-        .then(categories => {
-           
-            let html = `
-                <div class="w-100 d-flex justify-content-start mb-3">
-                    <a href="index.html" class="btn hero-btn btn-sm">🏠 На головну</a>
-                </div>
-                <h2>Каталог товарів</h2>
-                <div class="list-group">`;
-            
-            categories.forEach(category => {
-           
-                html += `
-                    <a href="#" class="list-group-item list-group-item-action" onclick="loadCategoryItems('${category.shortname}', event)">
-                        <h5 class="mb-1">${category.name}</h5>
-                        <p>${category.notes}</p>
-                    </a>`;
-            });
-
-            html += `
-                <a href="#" class="list-group-item list-group-item-action list-group-item-warning mt-3" onclick="loadSpecials(event)">
-                    ⭐ Specials (Випадкова категорія)
-                </a>
-            </div>`;
-
-            document.getElementById('main-content').innerHTML = html;
-        })
-        .catch(error => console.error('Помилка завантаження каталогу:', error));
+// --- ЛОГІКА ДЛЯ АДАПТИВНОГО МЕНЮ ---
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    // Додає або забирає клас 'active' при кліку на гамбургер
+    menu.classList.toggle('active');
 }
 
-// Функція завантаження товарів конкретної категорії
-function loadCategoryItems(shortname, event) {
-    if (event) event.preventDefault();
+// --- ЛОГІКА ДЛЯ КАРУСЕЛІ (СЛАЙДЕРА) ---
+let currentSlide = 0; // Поточний слайд
 
-    fetch(`data/${shortname}.json`)
-        .then(response => response.json())
-        .then(data => {
-         
-            let html = `
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 w-100">
-                    <h2 class="text-light mb-3 mb-md-0">Категорія: <span style="color: #00c6ff;">${data.categoryName}</span></h2>
-                    <button class="btn hero-btn" onclick="loadCatalog(event)">⬅ Повернутися до каталогу</button>
-                </div>
-                <div class="row w-100">
-            `;
+function moveSlide(step) {
+    const slides = document.querySelectorAll('.carousel-slide img');
+    const slider = document.getElementById('slider');
+    const totalSlides = slides.length;
 
-            data.items.forEach(item => {
-            
-                html += `
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm product-card">
-                            <img src="${item.image}" class="card-img-top" alt="${item.name}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${item.name}</h5>
-                                <p class="card-text flex-grow-1">${item.description}</p>
-                                <div class="price">${item.price}</div>
-                            </div>
-                        </div>
-                    </div>`;
-            });
+    // Оновлюємо індекс слайда
+    currentSlide = currentSlide + step;
 
-            html += '</div>';
-            document.getElementById('main-content').innerHTML = html;
-        })
-        .catch(error => console.error('Помилка завантаження товарів:', error));
+    // Якщо дійшли до кінця - повертаємось на початок
+    if (currentSlide >= totalSlides) {
+        currentSlide = 0;
+    } else if (currentSlide < 0) {
+        currentSlide = totalSlides - 1;
+    }
+
+    // Зсуваємо контейнер з картинками вліво (ефект ковзання)
+    slider.style.transform = `translateX(${-currentSlide * 100}%)`;
 }
 
-// Функція випадкового вибору категорії (Specials)
-function loadSpecials(event) {
-    if (event) event.preventDefault();
+// Автоматична зміна слайдів кожні 3 секунди
+setInterval(() => {
+    moveSlide(1);
+}, 3000);
 
-    fetch('data/categories.json')
-        .then(response => response.json())
-        .then(categories => {
-            const randomIndex = Math.floor(Math.random() * categories.length);
-            const randomCategory = categories[randomIndex].shortname;
-            loadCategoryItems(randomCategory);
-        })
-        .catch(error => console.error('Помилка завантаження Specials:', error));
-}
+// ... ТУТ МАЄ БУТИ ТВІЙ СТАРИЙ КОД З 7-Ї ЛАБИ (loadCatalog, loadCategoryItems тощо) ...
