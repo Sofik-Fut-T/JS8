@@ -16,7 +16,7 @@ function moveSlide(step) {
     const slider = document.getElementById('slider');
     const totalSlides = slides.length;
 
-    if (totalSlides === 0) return; // Захист від помилок, якщо слайдера немає на екрані
+    if (totalSlides === 0) return;
 
     currentSlide = currentSlide + step;
 
@@ -29,14 +29,11 @@ function moveSlide(step) {
     slider.style.transform = `translateX(${-currentSlide * 100}%)`;
 }
 
-// Автоматична зміна слайдів кожні 3 секунди
 setInterval(() => {
-    // Перевіряємо, чи є зараз слайдер на екрані (бо при відкритті каталогу він зникає)
     if(document.getElementById('slider')) {
         moveSlide(1);
     }
 }, 3000);
-
 
 // ==========================================
 // ЛОГІКА ДЛЯ КАТАЛОГУ (AJAX, Лабораторна 7)
@@ -46,12 +43,16 @@ setInterval(() => {
 function loadCatalog(event) {
     if (event) event.preventDefault();
 
-    fetch('data/categories.json')
-        .then(response => response.json())
+    // ЗМІНЕНО: тепер просто 'categories.json' замість 'data/categories.json'
+    fetch('categories.json')
+        .then(response => {
+            if (!response.ok) throw new Error("Не вдалося знайти categories.json");
+            return response.json();
+        })
         .then(categories => {
             let html = `
                 <div class="hero-container text-center mb-4">
-                    <a href="index.html" class="hero-btn" style="display: inline-block; margin-bottom: 20px;">🏠 Повернутися на головну (до слайдера)</a>
+                    <a href="index.html" class="hero-btn" style="display: inline-block; margin-bottom: 20px;">🏠 Повернутися на головну</a>
                     <h2 style="color: #00c6ff;">Каталог товарів</h2>
                 </div>
                 <div class="list-group" style="display: flex; flex-direction: column; gap: 10px; max-width: 800px; margin: 0 auto; padding: 0 20px;">`;
@@ -65,18 +66,20 @@ function loadCatalog(event) {
             });
 
             html += `</div>`;
-            
-            // Замінюємо вміст головного блоку (слайдер зникне, з'явиться каталог)
             document.getElementById('main-content').innerHTML = html;
         })
-        .catch(error => console.error('Помилка завантаження каталогу:', error));
+        .catch(error => {
+            console.error('Помилка:', error);
+            alert('Помилка завантаження каталогу. Перевір консоль (F12).');
+        });
 }
 
 // 2. Завантаження конкретних товарів категорії
 function loadCategoryItems(shortname, event) {
     if (event) event.preventDefault();
 
-    fetch(`data/${shortname}.json`)
+    // ЗМІНЕНО: тепер просто '${shortname}.json'
+    fetch(`${shortname}.json`)
         .then(response => response.json())
         .then(data => {
             let html = `
@@ -90,9 +93,10 @@ function loadCategoryItems(shortname, event) {
             `;
 
             data.items.forEach(item => {
+                // Якщо картинок у тебе ще немає, вони просто не відобразяться, але текст буде!
                 html += `
                     <div style="background: #16213e; border-radius: 10px; padding: 15px; width: 300px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-                        <img src="${item.image}" alt="${item.name}" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 15px;">
+                        <img src="images/${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/300x200?text=No+Image'" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 15px;">
                         <h3 style="font-size: 18px; margin-bottom: 10px; color: #fff;">${item.name}</h3>
                         <p style="font-size: 14px; color: #aaa; margin-bottom: 15px;">${item.description}</p>
                         <div style="font-size: 20px; font-weight: bold; color: #00c6ff;">${item.price}</div>
@@ -109,7 +113,7 @@ function loadCategoryItems(shortname, event) {
 function loadSpecials(event) {
     if (event) event.preventDefault();
 
-    fetch('data/categories.json')
+    fetch('categories.json')
         .then(response => response.json())
         .then(categories => {
             const randomIndex = Math.floor(Math.random() * categories.length);
