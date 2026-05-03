@@ -43,10 +43,10 @@ setInterval(() => {
 function loadCatalog(event) {
     if (event) event.preventDefault();
 
-    // ЗМІНЕНО: тепер просто 'categories.json' замість 'data/categories.json'
-    fetch('categories.json')
+    // ТЕПЕР ШЛЯХ ЗНОВУ ЧЕРЕЗ ПАПКУ data/
+    fetch('data/categories.json')
         .then(response => {
-            if (!response.ok) throw new Error("Не вдалося знайти categories.json");
+            if (!response.ok) throw new Error("Не вдалося знайти data/categories.json");
             return response.json();
         })
         .then(categories => {
@@ -70,7 +70,7 @@ function loadCatalog(event) {
         })
         .catch(error => {
             console.error('Помилка:', error);
-            alert('Помилка завантаження каталогу. Перевір консоль (F12).');
+            alert('Помилка завантаження каталогу. Переконайся, що файли лежать у папці data.');
         });
 }
 
@@ -78,8 +78,8 @@ function loadCatalog(event) {
 function loadCategoryItems(shortname, event) {
     if (event) event.preventDefault();
 
-    // ЗМІНЕНО: тепер просто '${shortname}.json'
-    fetch(`${shortname}.json`)
+    // ТЕПЕР ШЛЯХ ЗНОВУ ЧЕРЕЗ ПАПКУ data/
+    fetch(`data/${shortname}.json`)
         .then(response => response.json())
         .then(data => {
             let html = `
@@ -93,7 +93,6 @@ function loadCategoryItems(shortname, event) {
             `;
 
             data.items.forEach(item => {
-                // Якщо картинок у тебе ще немає, вони просто не відобразяться, але текст буде!
                 html += `
                     <div style="background: #16213e; border-radius: 10px; padding: 15px; width: 300px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
                         <img src="images/${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/300x200?text=No+Image'" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 15px;">
@@ -113,7 +112,7 @@ function loadCategoryItems(shortname, event) {
 function loadSpecials(event) {
     if (event) event.preventDefault();
 
-    fetch('categories.json')
+    fetch('data/categories.json')
         .then(response => response.json())
         .then(categories => {
             const randomIndex = Math.floor(Math.random() * categories.length);
