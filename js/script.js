@@ -95,7 +95,7 @@ function loadCategoryItems(shortname, event) {
             data.items.forEach(item => {
                 html += `
                     <div style="background: #16213e; border-radius: 10px; padding: 15px; width: 300px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
-                        <img src="images/${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/300x200?text=No+Image'" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 15px;">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/300x200?text=No+Image'" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 15px;">
                         <h3 style="font-size: 18px; margin-bottom: 10px; color: #fff;">${item.name}</h3>
                         <p style="font-size: 14px; color: #aaa; margin-bottom: 15px;">${item.description}</p>
                         <div style="font-size: 20px; font-weight: bold; color: #00c6ff;">${item.price}</div>
@@ -121,3 +121,4 @@ function loadSpecials(event) {
         })
         .catch(error => console.error('Помилка завантаження Specials:', error));
 }
+
